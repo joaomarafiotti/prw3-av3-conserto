@@ -7,16 +7,16 @@ import br.edu.ifsp.prw3_av3.dto.conserto.DadosDetalhamentoConserto;
 import br.edu.ifsp.prw3_av3.dto.conserto.DadosListagemConserto;
 import br.edu.ifsp.prw3_av3.dto.conserto.DadosListagemConsertoCompleta;
 import br.edu.ifsp.prw3_av3.repository.ConsertoRepository;
-import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 
+import jakarta.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -27,58 +27,67 @@ public class ConsertoController {
     @Autowired
     private ConsertoRepository repository;
 
-    // (já tinha) POST com 201 + Location
+    // POST — 201 Created + Location + body com detalhamento
     @PostMapping
     @Transactional
     public ResponseEntity<DadosDetalhamentoConserto> cadastrar(
             @RequestBody @Valid DadosCadastroConserto dto,
             UriComponentsBuilder uriBuilder) {
+
         var conserto = new Conserto(dto);
         repository.save(conserto);
-        var uri = uriBuilder.path("/consertos/{id}").buildAndExpand(conserto.getId()).toUri();
+
+        URI uri = uriBuilder.path("/consertos/{id}").buildAndExpand(conserto.getId()).toUri();
         return ResponseEntity.created(uri).body(new DadosDetalhamentoConserto(conserto));
     }
 
-    // (já tinha) GET completo paginado (pode optar por só ativos)
+    // GET completo paginado — parte 2 (sem filtro de ativos, seguindo a letra do enunciado)
     @GetMapping
     public ResponseEntity<Page<DadosListagemConsertoCompleta>> listarCompleto(Pageable paginacao) {
-        var page = repository.findAllByAtivoTrue(paginacao) // ou findAll(paginacao) se quiser manter todos
+        Page<DadosListagemConsertoCompleta> page = repository.findAll(paginacao)
                 .map(DadosListagemConsertoCompleta::new);
         return ResponseEntity.ok(page);
     }
 
-    // (ALTERADO) GET parcial sem paginação — agora só ATIVOS e com ID
+    // GET parcial (sem paginação) — parte 2/3 — SOMENTE ATIVOS e incluindo ID
     @GetMapping("/dados")
     public ResponseEntity<List<DadosListagemConserto>> listarParcial() {
-        var lista = repository.findByAtivoTrue().stream()
+        List<DadosListagemConserto> lista = repository.findByAtivoTrue()
+                .stream()
                 .map(DadosListagemConserto::new)
                 .toList();
         return ResponseEntity.ok(lista);
     }
 
-    // (NOVO) GET por ID — detalhamento
+    // GET por ID — parte 3 — detalhamento (DTO)
     @GetMapping("/{id}")
     public ResponseEntity<DadosDetalhamentoConserto> detalhar(@PathVariable Long id) {
-        var opt = repository.findById(id);
-        if (opt.isEmpty()) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(new DadosDetalhamentoConserto(opt.get()));
+        return repository.findById(id)
+                .map(c -> ResponseEntity.ok(new DadosDetalhamentoConserto(c)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // (NOVO) PUT — altera apenas dataSaida / mecanico.nome / mecanico.anos
+    // PUT — parte 3 — altera apenas dataSaida / mecanico.nome / mecanico.anos
     @PutMapping
     @Transactional
-    public ResponseEntity<DadosDetalhamentoConserto> atualizar(
-            @RequestBody @Valid DadosAtualizacaoConserto dto) {
-        var conserto = repository.getReferenceById(dto.id());
+    public ResponseEntity<DadosDetalhamentoConserto> atualizar(@RequestBody @Valid DadosAtualizacaoConserto dto) {
+        var opt = repository.findById(dto.id());
+        if (opt.isEmpty()) return ResponseEntity.notFound().build();
+
+        var conserto = opt.get();
         conserto.atualizar(dto);
+
         return ResponseEntity.ok(new DadosDetalhamentoConserto(conserto));
     }
 
-    // (NOVO) DELETE lógico — 204 No Content
+    // DELETE lógico — parte 3 — 204 No Content
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
-        var conserto = repository.getReferenceById(id);
+        var opt = repository.findById(id);
+        if (opt.isEmpty()) return ResponseEntity.notFound().build();
+
+        var conserto = opt.get();
         conserto.excluir();
         return ResponseEntity.noContent().build();
     }
