@@ -8,4 +8,9 @@ import lombok.*;
 public class Mecanico {
     private String nome;
     private Integer anosExperiencia;
+
+    public void atualizar(String novoNome, Integer novosAnos) {
+        if (novoNome != null) this.nome = novoNome;
+        if (novosAnos != null) this.anosExperiencia = novosAnos;
+    }
 }
