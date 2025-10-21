@@ -8,5 +8,6 @@ import lombok.*;
 public class Veiculo {
     private String marca;
     private String modelo;
-    private String ano; // "xxxx"
+    private String ano;  // "xxxx"
+    private String cor;  // opcional (veio da V2)
 }
