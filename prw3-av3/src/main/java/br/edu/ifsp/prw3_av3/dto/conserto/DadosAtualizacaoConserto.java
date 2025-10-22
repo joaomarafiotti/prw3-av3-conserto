@@ -7,7 +7,7 @@ public record DadosAtualizacaoConserto(
         @NotNull(message = "id é obrigatório")
         Long id,
 
-        // opcional, mas se vier precisa estar no formato
+        // eh opcional, mas se vier precisa estar no formato
         @Pattern(regexp = "\\d{2}/\\d{2}/\\d{4}", message = "dataSaida deve estar no formato dd/MM/yyyy")
         String dataSaida,
 

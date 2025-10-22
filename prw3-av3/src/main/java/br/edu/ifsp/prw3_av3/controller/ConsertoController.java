@@ -27,7 +27,7 @@ public class ConsertoController {
     @Autowired
     private ConsertoRepository repository;
 
-    // POST — 201 Created + Location + body com detalhamento
+    // POST - 201 created + location + body com detalhamento okay
     @PostMapping
     @Transactional
     public ResponseEntity<DadosDetalhamentoConserto> cadastrar(
@@ -41,7 +41,7 @@ public class ConsertoController {
         return ResponseEntity.created(uri).body(new DadosDetalhamentoConserto(conserto));
     }
 
-    // GET completo paginado — parte 2 (sem filtro de ativos, seguindo a letra do enunciado)
+    // GET completo paginado — p2 (sem filtro de ativos)
     @GetMapping
     public ResponseEntity<Page<DadosListagemConsertoCompleta>> listarCompleto(Pageable paginacao) {
         Page<DadosListagemConsertoCompleta> page = repository.findAll(paginacao)
@@ -49,7 +49,7 @@ public class ConsertoController {
         return ResponseEntity.ok(page);
     }
 
-    // GET parcial (sem paginação) — parte 2/3 — SOMENTE ATIVOS e incluindo ID
+    // GET parcial (sem paginacao) — parte 2/3 — somente ativos e incluindo id
     @GetMapping("/dados")
     public ResponseEntity<List<DadosListagemConserto>> listarParcial() {
         List<DadosListagemConserto> lista = repository.findByAtivoTrue()
@@ -59,7 +59,7 @@ public class ConsertoController {
         return ResponseEntity.ok(lista);
     }
 
-    // GET por ID — parte 3 — detalhamento (DTO)
+    // GET por ID — p3 — detalhamento (DTO)
     @GetMapping("/{id}")
     public ResponseEntity<DadosDetalhamentoConserto> detalhar(@PathVariable Long id) {
         return repository.findById(id)
@@ -67,7 +67,7 @@ public class ConsertoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // PUT — parte 3 — altera apenas dataSaida / mecanico.nome / mecanico.anos
+    // PUT — p3 — altera apenas dataSaida / mecanico.nome / mecanico.anos
     @PutMapping
     @Transactional
     public ResponseEntity<DadosDetalhamentoConserto> atualizar(@RequestBody @Valid DadosAtualizacaoConserto dto) {
@@ -80,7 +80,7 @@ public class ConsertoController {
         return ResponseEntity.ok(new DadosDetalhamentoConserto(conserto));
     }
 
-    // DELETE lógico — parte 3 — 204 No Content
+    // DELETE lpgico — p3 — 204 No Content
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<Void> excluir(@PathVariable Long id) {

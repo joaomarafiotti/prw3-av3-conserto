@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ConsertoRepository extends JpaRepository<Conserto, Long> {
 
-    // GET completo paginado (parte 2) — versão apenas ativos:
+    // GET completo paginado (p2) — versao apenas ativos:
     Page<Conserto> findAllByAtivoTrue(Pageable paginacao);
 
-    // GET parcial sem paginação (parte 2/3) — somente ativos
+    // GET parcial sem paginacao (parte 2/3) — somente ativos
     List<Conserto> findByAtivoTrue();
 }

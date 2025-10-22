@@ -1,7 +1,7 @@
 alter table consertos add ativo tinyint;
 
--- Todos os registros existentes passam a 'ativos' no momento da migração
+-- tds os registros existentes viram ativos no momento da migracao
 update consertos set ativo = 1;
 
--- (opcional, recomendado) garantir que não fique nulo daqui pra frente
+-- eh opcional mas pelo q vi garante que n fique nulo daqui pra frente
 alter table consertos alter column ativo set not null;

@@ -16,6 +16,6 @@ public class Veiculo {
     // mapeadas via @AttributeOverrides no Conserto
     private String marca;   // NOT NULL (V1)
     private String modelo;  // NOT NULL (V1)
-    private String ano;     // "yyyy" (V1)
+    private String ano;     // yyyy (V1)
     private String cor;     // opcional (V2)
 }

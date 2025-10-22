@@ -4,16 +4,16 @@ import jakarta.validation.constraints.*;
 
 public record DadosCadastroConserto(
 
-        // datas: "dd/MM/yyyy" (apenas formato)
+        // datas: dd/MM/yyyy (apenas formato)
         @NotBlank(message = "dataEntrada é obrigatória")
         @Pattern(regexp = "\\d{2}/\\d{2}/\\d{4}", message = "dataEntrada deve estar no formato dd/MM/yyyy")
         String dataEntrada,
 
-        // opcional, mas se vier precisa estar no formato
+        // se vier precisa estar no formato
         @Pattern(regexp = "\\d{2}/\\d{2}/\\d{4}", message = "dataSaida deve estar no formato dd/MM/yyyy")
         String dataSaida,
 
-        // obrigatórios
+        // obrigatorios
         @NotBlank(message = "mecanicoNome é obrigatório")
         String mecanicoNome,
 
@@ -21,7 +21,7 @@ public record DadosCadastroConserto(
         @Min(value = 0, message = "mecanicoAnos não pode ser negativo")
         Integer mecanicoAnos,
 
-        // veículo: obrigatórios + ano "xxxx"
+        // veiculo: obrigatorios + ano xxxx
         @NotBlank(message = "veiculoMarca é obrigatória")
         String veiculoMarca,
 
@@ -32,6 +32,6 @@ public record DadosCadastroConserto(
         @Pattern(regexp = "\\d{4}", message = "veiculoAno deve estar no formato yyyy (4 dígitos)")
         String veiculoAno,
 
-        // Parte 2: campo opcional (virá da V2)
+        // Parte 2: campo opcional (vai vim da V2)
         String veiculoCor
 ) {}

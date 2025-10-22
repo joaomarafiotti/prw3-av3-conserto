@@ -20,7 +20,7 @@ public class Conserto {
     @Column(name = "data_entrada", nullable = false, length = 10) // dd/MM/yyyy
     private String dataEntrada;
 
-    @Column(name = "data_saida", length = 10) // dd/MM/yyyy (opcional)
+    @Column(name = "data_saida", length = 10)
     private String dataSaida;
 
     @Embedded
@@ -35,7 +35,7 @@ public class Conserto {
         @AttributeOverride(name = "marca",  column = @Column(name = "veiculo_marca",  nullable = false, length = 60)),
         @AttributeOverride(name = "modelo", column = @Column(name = "veiculo_modelo", nullable = false, length = 60)),
         @AttributeOverride(name = "ano",    column = @Column(name = "veiculo_ano",    nullable = false, length = 4)),
-        @AttributeOverride(name = "cor",    column = @Column(name = "veiculo_cor",    length = 30)) // opcional (V2)
+        @AttributeOverride(name = "cor",    column = @Column(name = "veiculo_cor",    length = 30)) // (V2)
     })
     private Veiculo veiculo;
 
@@ -65,7 +65,7 @@ public class Conserto {
         }
     }
 
-    // Exclusão lógica
+    // Exclusao logica
     public void excluir() {
         this.ativo = false;
     }
