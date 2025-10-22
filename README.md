@@ -94,6 +94,7 @@ Um **Conserto** possui:
 2. Testar na ordem:
 
 POST {{baseUrl}}/consertos
+
 {
 "dataEntrada": "10/10/2025",
 "dataSaida": "12/10/2025",
@@ -106,8 +107,11 @@ POST {{baseUrl}}/consertos
 }
 
 GET {{baseUrl}}/consertos
+
 GET {{baseUrl}}/consertos/dados
+
 PUT {{baseUrl}}/consertos
+
 DELETE {{baseUrl}}/consertos/1
 
 3. Verificar na H2 se os dados estão sendo gravados corretamente.
